@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Test Function Selection</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+
+            .container {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                padding: 40px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+                max-width: 800px;
+                width: 100%;
+                animation: fadeInUp 0.6s ease-out;
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .header {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+
+            .header h1 {
+                color: #2d3748;
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 10px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            .header p {
+                color: #718096;
+                font-size: 1.1rem;
+            }
+
+            .function-grid {
+                display: grid;
+                gap: 20px;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+
+            .function-category {
+                background: #ffffff;
+                border-radius: 15px;
+                padding: 25px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+                border: 2px solid transparent;
+                transition: all 0.3s ease;
+            }
+
+            .function-category:hover {
+                transform: translateY(-5px);
+                border-color: #667eea;
+                box-shadow: 0 20px 40px rgba(102, 126, 234, 0.1);
+            }
+
+            .category-title {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                font-size: 1.4rem;
+                font-weight: 600;
+                color: #2d3748;
+            }
+
+            .category-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 12px;
+                font-size: 1.2rem;
+            }
+
+            .payroll-icon {
+                background: linear-gradient(135deg, #4facfe, #00f2fe);
+                color: white;
+            }
+
+            .transfer-icon {
+                background: linear-gradient(135deg, #43e97b, #38f9d7);
+                color: white;
+            }
+
+            .option-list {
+                list-style: none;
+            }
+
+            .option-item {
+                background: #f7fafc;
+                border-radius: 10px;
+                padding: 15px 20px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border-left: 4px solid transparent;
+                display: flex;
+                align-items: center;
+                justify-content: between;
+            }
+
+            .option-item:hover {
+                background: #edf2f7;
+                border-left-color: #667eea;
+                transform: translateX(5px);
+            }
+
+            .option-item:last-child {
+                margin-bottom: 0;
+            }
+
+            .option-text {
+                flex: 1;
+                font-weight: 500;
+                color: #4a5568;
+            }
+
+            .option-arrow {
+                color: #a0aec0;
+                font-size: 1.2rem;
+                transition: transform 0.3s ease;
+            }
+
+            .option-item:hover .option-arrow {
+                transform: translateX(5px);
+                color: #667eea;
+            }
+
+            .selected {
+                background: linear-gradient(
+                    135deg,
+                    #667eea,
+                    #764ba2
+                ) !important;
+                color: white !important;
+                border-left-color: #764ba2 !important;
+            }
+
+            .selected .option-text {
+                color: white;
+            }
+
+            .selected .option-arrow {
+                color: white;
+            }
+
+            .action-buttons {
+                margin-top: 40px;
+                text-align: center;
+                display: flex;
+                gap: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                border: none;
+                border-radius: 25px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+            }
+
+            .btn-primary {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            }
+
+            .btn-secondary {
+                background: #e2e8f0;
+                color: #4a5568;
+            }
+
+            .btn-secondary:hover {
+                background: #cbd5e0;
+                transform: translateY(-2px);
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 30px 20px;
+                    margin: 10px;
+                }
+
+                .header h1 {
+                    font-size: 2rem;
+                }
+
+                .function-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .category-title {
+                    font-size: 1.2rem;
+                }
+
+                .action-buttons {
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .btn {
+                    width: 100%;
+                    max-width: 200px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .container {
+                    padding: 20px 15px;
+                }
+
+                .header h1 {
+                    font-size: 1.8rem;
+                }
+
+                .option-item {
+                    padding: 12px 15px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Test Function Selection</h1>
+                <p>Choose a function to test from the options below</p>
+            </div>
+
+            <div class="function-grid">
+                <!-- Payroll Section -->
+                <div class="function-category">
+                    <div class="category-title">
+                        <div class="category-icon payroll-icon">💰</div>
+                        Payroll
+                    </div>
+                    <ul class="option-list">
+                        <li
+                            class="option-item"
+                            onclick="selectOption(this, 'payroll-single')"
+                        >
+                            <span class="option-text">Single Registration</span>
+                            <span class="option-arrow">→</span>
+                        </li>
+                        <li
+                            class="option-item"
+                            onclick="selectOption(this, 'payroll-batch')"
+                        >
+                            <span class="option-text">Batch Registration</span>
+                            <span class="option-arrow">→</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Payroll Transfer Section -->
+                <div class="function-category">
+                    <div class="category-title">
+                        <div class="category-icon transfer-icon">📊</div>
+                        Payroll Transfer
+                    </div>
+                    <ul class="option-list">
+                        <li
+                            class="option-item"
+                            onclick="selectOption(this, 'payroll-upload')"
+                        >
+                            <span class="option-text">Upload Batch</span>
+                            <span class="option-arrow">→</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Transfer Section -->
+                <div class="function-category">
+                    <div class="category-title">
+                        <div class="category-icon transfer-icon">🔄</div>
+                        Transfer
+                    </div>
+                    <ul class="option-list">
+                        <li
+                            class="option-item"
+                            onclick="selectOption(this, 'transfer-own')"
+                        >
+                            <span class="option-text">To Own Account</span>
+                            <span class="option-arrow">→</span>
+                        </li>
+                        <li
+                            class="option-item"
+                            onclick="selectOption(this, 'transfer-amk')"
+                        >
+                            <span class="option-text">Another AMK Account</span>
+                            <span class="option-arrow">→</span>
+                        </li>
+                        <li
+                            class="option-item"
+                            onclick="selectOption(this, 'transfer-bakong')"
+                        >
+                            <span class="option-text">To Bakong</span>
+                            <span class="option-arrow">→</span>
+                        </li>
+                        <li
+                            class="option-item"
+                            onclick="selectOption(this, 'transfer-local')"
+                        >
+                            <span class="option-text">To Local Bank</span>
+                            <span class="option-arrow">→</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="executeTest()">
+                    Execute Test
+                </button>
+                <button class="btn btn-secondary" onclick="resetSelection()">
+                    Reset Selection
+                </button>
+            </div>
+        </div>
+
+        <script>
+            let selectedFunction = null;
+
+            function selectOption(element, functionId) {
+                // Remove selection from all options
+                document.querySelectorAll('.option-item').forEach((item) => {
+                    item.classList.remove('selected');
+                });
+
+                // Add selection to clicked option
+                element.classList.add('selected');
+                selectedFunction = functionId;
+
+                // Update button state
+                const executeBtn = document.querySelector('.btn-primary');
+                executeBtn.style.opacity = '1';
+                executeBtn.style.pointerEvents = 'auto';
+            }
+
+            function executeTest() {
+                if (selectedFunction) {
+                    // Add loading state
+                    const btn = document.querySelector('.btn-primary');
+                    btn.innerHTML = 'Executing...';
+                    btn.style.background =
+                        'linear-gradient(135deg, #4299e1, #553c9a)';
+
+                    // Simulate test execution
+                    setTimeout(() => {
+                        alert(
+                            `Executing test for: ${getFunctionName(
+                                selectedFunction
+                            )}`
+                        );
+                        btn.innerHTML = 'Execute Test';
+                        btn.style.background =
+                            'linear-gradient(135deg, #667eea, #764ba2)';
+                    }, 1500);
+                } else {
+                    alert('Please select a function to test first.');
+                }
+            }
+
+            function resetSelection() {
+                document.querySelectorAll('.option-item').forEach((item) => {
+                    item.classList.remove('selected');
+                });
+                selectedFunction = null;
+
+                const executeBtn = document.querySelector('.btn-primary');
+                executeBtn.style.opacity = '0.7';
+                executeBtn.style.pointerEvents = 'none';
+            }
+
+            function getFunctionName(functionId) {
+                const names = {
+                    'payroll-single': 'Payroll - Single Registration',
+                    'payroll-batch': 'Payroll - Batch Registration',
+                    'payroll-upload': 'Payroll Transfer - Upload Batch',
+                    'transfer-own': 'Transfer - To Own Account',
+                    'transfer-amk': 'Transfer - Another AMK Account',
+                    'transfer-bakong': 'Transfer - To Bakong',
+                    'transfer-local': 'Transfer - To Local Bank',
+                };
+                return names[functionId] || 'Unknown Function';
+            }
+
+            // Initialize button state
+            document.addEventListener('DOMContentLoaded', function () {
+                const executeBtn = document.querySelector('.btn-primary');
+                executeBtn.style.opacity = '0.7';
+                executeBtn.style.pointerEvents = 'none';
+            });
+        </script>
+    </body>
+</html>
